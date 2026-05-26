@@ -9,6 +9,15 @@
                 "artisan",
                 "boost:mcp"
             ]
+        },
+        "shadcn": {
+            "type": "local",
+            "command": [
+                "npx",
+                "shadcn@latest",
+                "mcp"
+            ],
+            "enabled": true
         }
     }
 }
