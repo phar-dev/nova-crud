@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import {
     Table,
     TableBody,
@@ -6,13 +7,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { Config } from '@/types/crud';
+import type { Config, DataItem } from '@/types/crud';
 
 type GridProps = {
     config: Config;
+    data: DataItem[];
 };
 
-const Grid = ({ config }: GridProps) => {
+const Grid = ({ config, data }: GridProps) => {
     return (
         <div className="overflow-hidden rounded-md border">
             <Table>
@@ -26,11 +28,11 @@ const Grid = ({ config }: GridProps) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {config.data.map((row) => (
+                    {data.map((row) => (
                         <TableRow key={row.id}>
                             {config.columns.map((column) => (
                                 <TableCell key={column.name}>
-                                    {row[column.name]}
+                                    {row[column.name] as ReactNode}
                                 </TableCell>
                             ))}
                         </TableRow>

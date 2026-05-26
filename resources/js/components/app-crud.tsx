@@ -1,45 +1,34 @@
 import Grid from '@/components/app-grid';
-import type { Config } from '@/types/crud';
+import type { Config, DataItem } from '@/types/crud';
 import { Button } from './ui/button';
 
-const Crud = () => {
-    const config: Config = {
+type CrudProps = {
+    config?: Config;
+    data?: DataItem[];
+};
+
+const Crud = ({ config, data }: CrudProps) => {
+    const defaultConfig: Config = {
         columns: [
             {
                 name: 'id',
                 label: 'ID',
             },
             {
-                name: 'name',
-                label: 'Name',
-            },
-            {
-                name: 'email',
-                label: 'Email',
+                name: 'created_at',
+                label: 'Created At',
             },
         ],
-        data: [
-            {
-                id: 1,
-                name: 'John Doe',
-                email: 'john.doe@example.com',
-            },
-            {
-                id: 2,
-                name: 'Jane Doe',
-                email: 'jane.doe@example.com',
-            },
-        ],
-        title: 'Users',
+        title: 'CRUD',
     };
 
     return (
         <>
             <div className="mb-4 flex items-center justify-between">
-                <h1>{config.title}</h1>
+                <h1>{config?.title || defaultConfig.title}</h1>
                 <Button variant="outline">Add New</Button>
             </div>
-            <Grid config={config} />
+            <Grid config={config || defaultConfig} data={data || []} />
         </>
     );
 };

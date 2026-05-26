@@ -1,16 +1,14 @@
-export type Row = {
-    id: number;
-    name: string;
-    email: string;
-};
-
 export type Column = {
-    name: keyof Row;
+    name: string;
     label: string;
 };
 
 export type Config = {
     columns: Column[];
-    data: Row[];
     title: string;
+};
+
+export type DataItem = {
+    id: string | number;
+    [index: string]: unknown;
 };
