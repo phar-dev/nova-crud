@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\Services\RoleServiceInterface;
+use App\Contracts\Services\UserServiceInterface;
+use App\Services\RoleService;
+use App\Services\UserService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(RoleServiceInterface::class, RoleService::class);
+        $this->app->bind(UserServiceInterface::class, UserService::class);
     }
 
     /**
