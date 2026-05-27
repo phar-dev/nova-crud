@@ -24,6 +24,23 @@ export type Passkey = {
 };
 /* @end-chisel-passkeys */
 
+export type Permission = {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+};
+
+export type Role = {
+    id: number;
+    name: string;
+    permissions?: Permission[];
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+};
+
 export type TwoFactorSetupData = {
     svg: string;
     url: string;
