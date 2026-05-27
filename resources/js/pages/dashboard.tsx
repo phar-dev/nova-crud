@@ -1,5 +1,4 @@
 import { Head } from '@inertiajs/react';
-import Crud from '@/components/app-crud';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { dashboard } from '@/routes';
 

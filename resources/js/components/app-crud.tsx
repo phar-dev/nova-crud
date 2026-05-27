@@ -1,36 +1,77 @@
-import { Link } from '@inertiajs/react';
 import Grid from '@/components/app-grid';
 import type { CrudConfig, DataItem } from '@/types/crud';
-import type { PaginationMeta } from '@/types/pagination';
 import { Button } from './ui/button';
 
-type CrudProps<T extends DataItem> = {
-    config: CrudConfig<T>;
-    data: T[];
-    meta?: PaginationMeta;
+type CrudProps = {
+    config?: CrudConfig;
+    data?: DataItem[];
+    meta?: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+        from: number | null;
+        to: number | null;
+    };
 };
 
-const Crud = <T extends DataItem>({ config, data, meta }: CrudProps<T>) => {
+const Crud = ({ config, data, meta }: CrudProps) => {
+    const defaultConfig: CrudConfig = {
+        columns: [
+            {
+                key: 'id',
+                label: 'ID',
+            },
+            {
+                key: 'created_at',
+                label: 'Created At',
+            },
+        ],
+        title: 'CRUD',
+    };
+
+    const merged = config || defaultConfig;
+
     return (
         <>
             <div className="mb-4 flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">{config.title}</h1>
-                    {config.description && (
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            {config.description}
-                        </p>
-                    )}
-                </div>
-                {config.createRoute && (
-                    <Link href={config.createRoute}>
-                        <Button variant="outline">
-                            {config.createButtonLabel ?? 'Add New'}
-                        </Button>
-                    </Link>
+                <h1 className="text-2xl font-semibold">{merged.title}</h1>
+                {merged.createRoute && (
+                    <Button variant="outline" asChild>
+                        <a href={merged.createRoute}>
+                            {merged.createButtonLabel || 'Add New'}
+                        </a>
+                    </Button>
                 )}
             </div>
-            <Grid config={config} data={data} meta={meta} />
+
+            {merged.description && (
+                <p className="mb-4 text-sm text-muted-foreground">
+                    {merged.description}
+                </p>
+            )}
+
+            {data && data.length > 0 ? (
+                <Grid
+                    columns={merged.columns}
+                    data={data}
+                    actions={merged.actions}
+                    deleteRoute={merged.deleteRoute}
+                />
+            ) : (
+                <p className="py-8 text-center text-sm text-muted-foreground">
+                    {merged.emptyMessage || 'No records found'}
+                </p>
+            )}
+
+            {meta && (
+                <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                    <span>
+                        Showing {meta.from ?? 0} to {meta.to ?? 0} of{' '}
+                        {meta.total}
+                    </span>
+                </div>
+            )}
         </>
     );
 };
