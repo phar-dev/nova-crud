@@ -2,8 +2,9 @@ export type User = {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
-    email_verified_at: string | null;
+  avatar?: string;
+  roles?: Role[];
+  email_verified_at: string | null;
     two_factor_enabled?: boolean;
     created_at: string;
     updated_at: string;
@@ -23,6 +24,23 @@ export type Passkey = {
     last_used_at_diff: string | null;
 };
 /* @end-chisel-passkeys */
+
+export type Permission = {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+};
+
+export type Role = {
+    id: number;
+    name: string;
+    permissions?: Permission[];
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+};
 
 export type TwoFactorSetupData = {
     svg: string;
