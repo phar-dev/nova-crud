@@ -3,7 +3,7 @@
 use App\Models\User;
 
 test('user index page can be rendered', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->get(route('users.index'));
 
@@ -12,7 +12,7 @@ test('user index page can be rendered', function () {
 });
 
 test('user create page can be rendered', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->get(route('users.create'));
 
@@ -21,7 +21,7 @@ test('user create page can be rendered', function () {
 });
 
 test('user can be created', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->post(route('users.store'), [
         'name' => 'Test User',
@@ -39,7 +39,7 @@ test('user can be created', function () {
 });
 
 test('user creation requires valid data', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->post(route('users.store'), [
         'name' => '',
@@ -52,7 +52,7 @@ test('user creation requires valid data', function () {
 });
 
 test('user edit page can be rendered', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = User::factory()->create();
 
     $response = $this->actingAs($admin)->get(route('users.edit', $target));
@@ -65,7 +65,7 @@ test('user edit page can be rendered', function () {
 });
 
 test('user can be updated', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = User::factory()->create();
 
     $response = $this->actingAs($admin)->put(route('users.update', $target), [
@@ -85,7 +85,7 @@ test('user can be updated', function () {
 });
 
 test('user update ignores empty password', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = User::factory()->create();
     $originalPassword = $target->password;
 
@@ -103,7 +103,7 @@ test('user update ignores empty password', function () {
 });
 
 test('user can be deleted', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = User::factory()->create();
 
     $response = $this->actingAs($admin)->delete(route('users.destroy', $target));
