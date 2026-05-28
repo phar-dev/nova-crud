@@ -80,4 +80,47 @@ class User extends Authenticatable implements PasskeyUser
         return $this->belongsToMany(Role::class, 'user_has_roles', 'id_user', 'id_role')
             ->withTimestamps();
     }
+
+    /**
+     * Check if the user has a specific permission through any of their roles.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        return $this->roles()
+            ->whereHas('permissions', fn ($q) => $q->where('permissions.name', $permission))
+            ->exists();
+    }
+
+    /**
+     * Check if the user has any of the given permissions.
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        return $this->roles()
+            ->whereHas('permissions', fn ($q) => $q->whereIn('permissions.name', $permissions))
+            ->exists();
+    }
+
+    /**
+     * Check if the user has a specific role.
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->roles()->where('roles.name', $role)->exists();
+    }
+
+    /**
+     * Get all permission names from all roles.
+     *
+     * @return string[]
+     */
+    public function getAllPermissionsAttribute(): array
+    {
+        return $this->roles
+            ->loadMissing('permissions')
+            ->flatMap(fn (Role $role) => $role->permissions->pluck('name'))
+            ->unique()
+            ->values()
+            ->all();
+    }
 }

@@ -1,10 +1,9 @@
 <?php
 
 use App\Models\Role;
-use App\Models\User;
 
 test('role index page can be rendered', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->get(route('roles.index'));
 
@@ -13,7 +12,7 @@ test('role index page can be rendered', function () {
 });
 
 test('role create page can be rendered', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->get(route('roles.create'));
 
@@ -22,21 +21,21 @@ test('role create page can be rendered', function () {
 });
 
 test('role can be created', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->post(route('roles.store'), [
-        'name' => 'Admin',
+        'name' => 'Editor',
     ]);
 
     $response->assertRedirect(route('roles.index'));
 
     $this->assertDatabaseHas('roles', [
-        'name' => 'Admin',
+        'name' => 'Editor',
     ]);
 });
 
 test('role creation requires valid data', function () {
-    $user = User::factory()->create();
+    $user = createAdminUser();
 
     $response = $this->actingAs($user)->post(route('roles.store'), [
         'name' => '',
@@ -46,7 +45,7 @@ test('role creation requires valid data', function () {
 });
 
 test('role edit page can be rendered', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = Role::factory()->create();
 
     $response = $this->actingAs($admin)->get(route('roles.edit', $target));
@@ -59,7 +58,7 @@ test('role edit page can be rendered', function () {
 });
 
 test('role can be updated', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = Role::factory()->create();
 
     $response = $this->actingAs($admin)->put(route('roles.update', $target), [
@@ -75,7 +74,7 @@ test('role can be updated', function () {
 });
 
 test('role can be deleted', function () {
-    $admin = User::factory()->create();
+    $admin = createAdminUser();
     $target = Role::factory()->create();
 
     $response = $this->actingAs($admin)->delete(route('roles.destroy', $target));

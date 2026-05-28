@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +47,24 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Create a user with all permissions (Admin role).
+ */
+function createAdminUser(): User
 {
-    // ..
+    $permissions = [
+        'users.index', 'users.create', 'users.edit', 'users.delete',
+        'roles.index', 'roles.create', 'roles.edit', 'roles.delete',
+    ];
+
+    $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+
+    $permissionIds = collect($permissions)->map(fn ($name) => Permission::firstOrCreate(['name' => $name])->id);
+
+    $adminRole->permissions()->sync($permissionIds);
+
+    $user = User::factory()->create();
+    $user->roles()->sync([$adminRole->id]);
+
+    return $user;
 }

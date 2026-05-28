@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
 import {
     Table,
@@ -25,6 +25,7 @@ type GridProps = {
     data: DataItem[];
     actions?: CrudAction<DataItem>[];
     deleteRoute?: (item: DataItem) => string;
+    deletePermission?: string;
 };
 
 const getColKey = (col: CrudColumn<DataItem>): string =>
@@ -37,10 +38,19 @@ const getColValue = (row: DataItem, col: CrudColumn<DataItem>): ReactNode => {
     return row[key] as ReactNode;
 };
 
-const Grid = ({ columns, data, actions, deleteRoute }: GridProps) => {
+const Grid = ({ columns, data, actions, deleteRoute, deletePermission }: GridProps) => {
+    const { auth } = usePage().props;
     const [deleteTarget, setDeleteTarget] = useState<DataItem | null>(null);
 
-    const hasActions = (actions && actions.length > 0) || deleteRoute;
+    const canDelete =
+        !deletePermission || auth.permissions.includes(deletePermission);
+
+    const visibleActions = actions?.filter(
+        (a) => !a.permission || auth.permissions.includes(a.permission),
+    );
+
+    const hasActions =
+        (visibleActions && visibleActions.length > 0) || (deleteRoute && canDelete);
 
     const handleDelete = () => {
         if (!deleteTarget || !deleteRoute) return;
@@ -77,7 +87,7 @@ const Grid = ({ columns, data, actions, deleteRoute }: GridProps) => {
                             {hasActions && (
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-1">
-                                        {actions?.map((action) => (
+                                        {visibleActions?.map((action) => (
                                             <Button
                                                 key={action.label}
                                                 variant={
@@ -95,7 +105,7 @@ const Grid = ({ columns, data, actions, deleteRoute }: GridProps) => {
                                                 </a>
                                             </Button>
                                         ))}
-                                        {deleteRoute && (
+                                        {deleteRoute && canDelete && (
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
