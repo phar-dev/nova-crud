@@ -23,6 +23,8 @@ class UserFormRequest extends FormRequest
             'password' => $userId
                 ? ['nullable', 'string', 'min:8', 'confirmed']
                 : ['required', 'string', 'min:8', 'confirmed'],
+            'roles' => ['sometimes', 'array'],
+            'roles.*' => ['exists:roles,id'],
         ];
     }
 }
