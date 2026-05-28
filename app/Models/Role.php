@@ -42,4 +42,10 @@ class Role extends Model
         return $this->belongsToMany(Permission::class, 'roles_has_permissions', 'id_role', 'id_permission')
             ->withTimestamps();
     }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_has_roles', 'id_role', 'id_user')
+            ->withTimestamps();
+    }
 }

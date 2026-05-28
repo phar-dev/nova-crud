@@ -47,7 +47,13 @@ class UserService implements UserServiceInterface
 
     public function create(array $data): User
     {
-        return User::create($data);
+        $roles = $data['roles'] ?? [];
+        unset($data['roles']);
+
+        $user = User::create($data);
+        $user->roles()->sync($roles);
+
+        return $user;
     }
 
     public function update(User $user, array $data): User
@@ -57,6 +63,10 @@ class UserService implements UserServiceInterface
         }
 
         $user->fill($data)->save();
+
+        if (array_key_exists('roles', $data)) {
+            $user->roles()->sync($data['roles']);
+        }
 
         return $user;
     }

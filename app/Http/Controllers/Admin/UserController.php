@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Contracts\Services\UserServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\UserFormRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -41,7 +42,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return inertia('admin/users/create');
+        return inertia('admin/users/create', [
+            'roles' => Role::all(),
+        ]);
     }
 
     /**
@@ -59,7 +62,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return inertia('admin/users/[id]/edit', ['user' => $user]);
+        return inertia('admin/users/[id]/edit', [
+            'user' => $user->load('roles'),
+            'roles' => Role::all(),
+        ]);
     }
 
     /**
