@@ -34,7 +34,17 @@ php artisan key:generate
 
 Editar `.env` según tu entorno (base de datos, mail, etc.).
 
-### 4. Levantar contenedores (Sail)
+### 4. Publicar configuración de Sail
+
+```bash
+php artisan sail:install
+```
+
+Este comando publica el archivo `docker-compose.yml` y pregunta qué servicios querés incluir. Seleccioná al menos **mysql** (y opcionalmente mailpit, redis, etc.).
+
+> Si querés personalizar después, editá `docker-compose.yml` directamente.
+
+### 5. Levantar contenedores (Sail)
 
 ```bash
 # Iniciar Sail en background
@@ -44,11 +54,11 @@ Editar `.env` según tu entorno (base de datos, mail, etc.).
 alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 ```
 
-Sail levanta los servicios necesarios (app, mysql, etc.).
+Sail levanta los servicios necesarios (app, mysql, etc.). La primera vez descarga las imágenes Docker.
 
 > Si no usás Sail, configurá manualmente tu servidor web y base de datos.
 
-### 5. Migrar y seedar la base de datos
+### 6. Migrar y seedar la base de datos
 
 ```bash
 ./vendor/bin/sail php artisan migrate --seed
@@ -59,13 +69,13 @@ Esto crea las tablas y población inicial:
 - Rol **Admin** con todos los permisos
 - Usuario de prueba: `test@example.com`
 
-### 6. Instalar dependencias frontend
+### 7. Instalar dependencias frontend
 
 ```bash
 ./vendor/bin/sail pnpm install
 ```
 
-### 7. Compilar assets
+### 8. Compilar assets
 
 ```bash
 ./vendor/bin/sail pnpm run build
