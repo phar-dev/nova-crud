@@ -1,3 +1,4 @@
+import { usePage } from '@inertiajs/react';
 import Grid from '@/components/app-grid';
 import type { CrudConfig, DataItem } from '@/types/crud';
 import { Button } from './ui/button';
@@ -16,6 +17,8 @@ type CrudProps = {
 };
 
 const Crud = ({ config, data, meta }: CrudProps) => {
+    const { auth } = usePage().props;
+
     const defaultConfig: CrudConfig = {
         columns: [
             {
@@ -32,11 +35,15 @@ const Crud = ({ config, data, meta }: CrudProps) => {
 
     const merged = config || defaultConfig;
 
+    const canCreate =
+        !merged.createPermission ||
+        auth.permissions.includes(merged.createPermission);
+
     return (
         <>
             <div className="mb-4 flex items-center justify-between">
                 <h1 className="text-2xl font-semibold">{merged.title}</h1>
-                {merged.createRoute && (
+                {merged.createRoute && canCreate && (
                     <Button variant="outline" asChild>
                         <a href={merged.createRoute}>
                             {merged.createButtonLabel || 'Add New'}
@@ -57,6 +64,7 @@ const Crud = ({ config, data, meta }: CrudProps) => {
                     data={data}
                     actions={merged.actions}
                     deleteRoute={merged.deleteRoute}
+                    deletePermission={merged.deletePermission}
                 />
             ) : (
                 <p className="py-8 text-center text-sm text-muted-foreground">

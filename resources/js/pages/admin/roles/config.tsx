@@ -9,6 +9,8 @@ const config: CrudConfig<Role> = {
     description: 'Manage system roles',
     createRoute: roles.create.url(),
     createButtonLabel: 'New Role',
+    createPermission: 'roles.create',
+    deletePermission: 'roles.delete',
     emptyMessage: 'No roles found',
     resourceName: 'role',
 
@@ -45,6 +47,7 @@ const config: CrudConfig<Role> = {
             icon: <Pencil />,
             variant: 'ghost',
             href: (role) => roles.edit.url(role.id),
+            permission: 'roles.edit',
         },
     ],
 

@@ -9,6 +9,8 @@ const config: CrudConfig<User> = {
     description: 'Manage system users',
     createRoute: users.create.url(),
     createButtonLabel: 'New User',
+    createPermission: 'users.create',
+    deletePermission: 'users.delete',
     emptyMessage: 'No users found',
     resourceName: 'user',
 
@@ -73,6 +75,7 @@ const config: CrudConfig<User> = {
             icon: <Pencil />,
             variant: 'ghost',
             href: (user) => users.edit.url(user.id),
+            permission: 'users.edit',
         },
     ],
 
