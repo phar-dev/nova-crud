@@ -18,10 +18,6 @@ import roles from '@/routes/roles';
 import users from '@/routes/users';
 import type { NavItem } from '@/types';
 
-function hasAnyPerm(permissions: string[], required: string[]): boolean {
-    return required.some((p) => permissions.includes(p));
-}
-
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
@@ -44,11 +40,11 @@ export function AppSidebar() {
         { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
     ];
 
-    if (hasAnyPerm(perms, ['users.index', 'manage-users'])) {
+    if (perms.includes('users.index')) {
         items.push({ title: 'Users', href: users.index(), icon: Users });
     }
 
-    if (hasAnyPerm(perms, ['roles.index', 'manage-roles'])) {
+    if (perms.includes('roles.index')) {
         items.push({ title: 'Roles', href: roles.index(), icon: Tag });
     }
 

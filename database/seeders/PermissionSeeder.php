@@ -10,12 +10,6 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            'manage-users',
-            'manage-roles',
-            'manage-permissions',
-            'view-reports',
-            'manage-settings',
-            // Granular user permissions
             'users.index',
             'users.create',
             'users.edit',

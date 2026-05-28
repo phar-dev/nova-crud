@@ -53,7 +53,6 @@ expect()->extend('toBeOne', function () {
 function createAdminUser(): User
 {
     $permissions = [
-        'manage-users', 'manage-roles', 'manage-permissions', 'view-reports', 'manage-settings',
         'users.index', 'users.create', 'users.edit', 'users.delete',
         'roles.index', 'roles.create', 'roles.edit', 'roles.delete',
     ];
