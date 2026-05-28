@@ -15,6 +15,16 @@ class PermissionSeeder extends Seeder
             'manage-permissions',
             'view-reports',
             'manage-settings',
+            // Granular user permissions
+            'users.index',
+            'users.create',
+            'users.edit',
+            'users.delete',
+            // Granular role permissions
+            'roles.index',
+            'roles.create',
+            'roles.edit',
+            'roles.delete',
         ];
 
         foreach ($permissions as $name) {
